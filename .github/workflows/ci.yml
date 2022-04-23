@@ -1,0 +1,39 @@
+name: Test
+
+on: [push]
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-18.04
+
+    services:
+      # https://hub.docker.com/_/postgres
+      postgres:
+        image: postgres:11
+        ports: ["5432:5432"]
+        env:
+          # uses the image's default POSTGRES_USER ('postgres')
+          POSTGRES_PASSWORD: password
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby and install gems
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run Linter
+        run: bundle exec rubocop --parallel
+
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+        run: |
+          bin/rails db:create
+          bin/rails db:migrate
+
+      - name: Run Tests
+        run: bin/rails test

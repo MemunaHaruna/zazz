@@ -1,11 +1,23 @@
 AllCops:
+  SuggestExtensions: false
   NewCops: enable
   Exclude:
+    - vendor/bundle/**/*
     - 'db/**/*'
     - 'config/**/*'
     - 'bin/**/'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - '.git/**/*'
     - 'config.ru'
     - 'Rakefile'
 
+
 Style/Documentation:
   Enabled: false
+
+Layout/LineLength:
+  Max: 120
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
